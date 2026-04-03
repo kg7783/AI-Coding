@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/button_color</item>
+        <item name="colorPrimaryDark">@color/button_color</item>
+        <item name="colorAccent">@color/button_color</item>
+        <item name="android:windowBackground">@color/background_color</item>
+    </style>
+
+    <style name="NumpadButton" parent="Widget.AppCompat.Button">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:background">@color/numpad_button_color</item>
+    </style>
+
+    <style name="SetupButton" parent="Widget.AppCompat.Button">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/button_color</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
+    <style name="ToggleNumberButton" parent="Widget.AppCompat.Button">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+</resources>

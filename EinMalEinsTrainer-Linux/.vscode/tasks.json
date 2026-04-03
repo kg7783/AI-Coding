@@ -1,0 +1,19 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "CMake: Build",
+            "command": "cd ${workspaceFolder}/build && cmake .. && make -j4",
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Baue das Projekt mit CMake"
+        }
+    ],
+    "version": "2.0.0"
+}

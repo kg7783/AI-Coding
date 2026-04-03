@@ -1,0 +1,6 @@
+# ninja log v5
+1	889	1775229119386171183	CMakeFiles/EinMalEinsTrainer.dir/src/main.cpp.o	3d4bedb3164e1fe
+1	1020	1775229119517093032	CMakeFiles/EinMalEinsTrainer.dir/src/GUI.cpp.o	7458791ed3a6d27f
+1020	1124	1775229119619032182	EinMalEinsTrainer	2ae382e912e298a1
+1	493	1775229118989408475	CMakeFiles/EinMalEinsTrainer.dir/src/Trainer.cpp.o	dfbdef41346d27c7
+1	577	1775229119074357313	CMakeFiles/EinMalEinsTrainer.dir/src/ConfigManager.cpp.o	8c493c51bfde16bd

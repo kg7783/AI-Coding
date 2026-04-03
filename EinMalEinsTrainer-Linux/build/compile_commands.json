@@ -1,0 +1,26 @@
+[
+{
+  "directory": "/home/kg7783/AI-Coding/EinMalEinsTrainer/build",
+  "command": "/usr/bin/g++ -I/usr/include/SDL2 -I/usr/include/harfbuzz -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -g -std=gnu++17 -o CMakeFiles/EinMalEinsTrainer.dir/src/main.cpp.o -c /home/kg7783/AI-Coding/EinMalEinsTrainer/src/main.cpp",
+  "file": "/home/kg7783/AI-Coding/EinMalEinsTrainer/src/main.cpp",
+  "output": "/home/kg7783/AI-Coding/EinMalEinsTrainer/build/CMakeFiles/EinMalEinsTrainer.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/kg7783/AI-Coding/EinMalEinsTrainer/build",
+  "command": "/usr/bin/g++ -I/usr/include/SDL2 -I/usr/include/harfbuzz -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -g -std=gnu++17 -o CMakeFiles/EinMalEinsTrainer.dir/src/Trainer.cpp.o -c /home/kg7783/AI-Coding/EinMalEinsTrainer/src/Trainer.cpp",
+  "file": "/home/kg7783/AI-Coding/EinMalEinsTrainer/src/Trainer.cpp",
+  "output": "/home/kg7783/AI-Coding/EinMalEinsTrainer/build/CMakeFiles/EinMalEinsTrainer.dir/src/Trainer.cpp.o"
+},
+{
+  "directory": "/home/kg7783/AI-Coding/EinMalEinsTrainer/build",
+  "command": "/usr/bin/g++ -I/usr/include/SDL2 -I/usr/include/harfbuzz -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -g -std=gnu++17 -o CMakeFiles/EinMalEinsTrainer.dir/src/ConfigManager.cpp.o -c /home/kg7783/AI-Coding/EinMalEinsTrainer/src/ConfigManager.cpp",
+  "file": "/home/kg7783/AI-Coding/EinMalEinsTrainer/src/ConfigManager.cpp",
+  "output": "/home/kg7783/AI-Coding/EinMalEinsTrainer/build/CMakeFiles/EinMalEinsTrainer.dir/src/ConfigManager.cpp.o"
+},
+{
+  "directory": "/home/kg7783/AI-Coding/EinMalEinsTrainer/build",
+  "command": "/usr/bin/g++ -I/usr/include/SDL2 -I/usr/include/harfbuzz -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -g -std=gnu++17 -o CMakeFiles/EinMalEinsTrainer.dir/src/GUI.cpp.o -c /home/kg7783/AI-Coding/EinMalEinsTrainer/src/GUI.cpp",
+  "file": "/home/kg7783/AI-Coding/EinMalEinsTrainer/src/GUI.cpp",
+  "output": "/home/kg7783/AI-Coding/EinMalEinsTrainer/build/CMakeFiles/EinMalEinsTrainer.dir/src/GUI.cpp.o"
+}
+]

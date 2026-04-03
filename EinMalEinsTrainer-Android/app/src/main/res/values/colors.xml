@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background_color">#87CEEB</color>
+    <color name="field_bg_color">#FFFFFF</color>
+    <color name="text_color">#000000</color>
+    <color name="operator_color">#323232</color>
+    <color name="correct_color">#228B22</color>
+    <color name="wrong_color">#DC143C</color>
+    <color name="input_bg_color">#E6E6FA</color>
+    <color name="selected_color">#64C864</color>
+    <color name="unselected_color">#C8C8C8</color>
+    <color name="button_color">#4682B4</color>
+    <color name="numpad_button_color">#F0F0FA</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+</resources>

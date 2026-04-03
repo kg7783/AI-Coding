@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#87CEEB"
+    android:padding="8dp">
+
+    <de.einmaleins.trainer.StatsView
+        android:id="@+id/statsView"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginBottom="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="4dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ein Mal Eins"
+            android:textSize="32sp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trainer"
+            android:textSize="32sp"
+            android:textColor="#333333"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <de.einmaleins.trainer.ProblemView
+            android:id="@+id/problemView1"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_margin="8dp" />
+
+        <de.einmaleins.trainer.ProblemView
+            android:id="@+id/problemView2"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_margin="8dp" />
+
+    </LinearLayout>
+
+    <de.einmaleins.trainer.NumberPadView
+        android:id="@+id/numberPad"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_margin="8dp" />
+
+    <Button
+        android:id="@+id/btnHistory"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:text="Verlauf"
+        android:textSize="16sp"
+        android:background="#228B22"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/btnNewSession"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:text="Neue Sitzung"
+        android:textSize="16sp"
+        android:background="#FFA500"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/btnSetup"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Konfiguration"
+        android:textSize="16sp"
+        android:background="#4682B4"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingVertical="4dp">
+
+    <TextView
+        android:id="@+id/tvSeriesLabel"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:text="1×:"
+        android:textSize="14sp"
+        android:textColor="#333333"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="12dp"
+        android:layout_weight="1"
+        android:layout_marginHorizontal="8dp"
+        android:orientation="horizontal"
+        android:background="@drawable/progress_background">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/progress_correct" />
+
+        <ProgressBar
+            android:id="@+id/progressBarWrong"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/progress_wrong" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvSeriesStats"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:text="0 von 0"
+        android:textSize="12sp"
+        android:textColor="#333333"
+        android:textAlignment="textEnd" />
+
+</LinearLayout>
