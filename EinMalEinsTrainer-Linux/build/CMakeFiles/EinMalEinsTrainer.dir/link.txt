@@ -1,1 +1,0 @@
-/usr/bin/c++ -g -Wl,--dependency-file=CMakeFiles/EinMalEinsTrainer.dir/link.d CMakeFiles/EinMalEinsTrainer.dir/src/main.cpp.o CMakeFiles/EinMalEinsTrainer.dir/src/Trainer.cpp.o CMakeFiles/EinMalEinsTrainer.dir/src/ConfigManager.cpp.o CMakeFiles/EinMalEinsTrainer.dir/src/GUI.cpp.o -o EinMalEinsTrainer  -lSDL2_ttf -lSDL2

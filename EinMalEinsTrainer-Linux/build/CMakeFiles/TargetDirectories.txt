@@ -1,3 +1,0 @@
-/home/kg7783/AI-Coding/EinMalEinsTrainer/build/CMakeFiles/EinMalEinsTrainer.dir
-/home/kg7783/AI-Coding/EinMalEinsTrainer/build/CMakeFiles/edit_cache.dir
-/home/kg7783/AI-Coding/EinMalEinsTrainer/build/CMakeFiles/rebuild_cache.dir
