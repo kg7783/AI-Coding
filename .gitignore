@@ -1,2 +1,13 @@
 
 EinMalEinsTrainer-Linux/build/
+
+EinMalEinsTrainer-Android/.gradle/
+EinMalEinsTrainer-Android/.idea/
+EinMalEinsTrainer-Android/android/.tmp/
+EinMalEinsTrainer-Android/build/
+EinMalEinsTrainer-Android/app/build/
+EinMalEinsTrainer-Android/android/native/
+EinMalEinsTrainer-Android/android/caches/
+EinMalEinsTrainer-Android/android/wrapper/
+EinMalEinsTrainer-Android/android/daemon/
+
