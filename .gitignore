@@ -1,6 +1,5 @@
 
 EinMalEinsTrainer-Linux/build/
-<<<<<<< HEAD
 
 EinMalEinsTrainer-Android/.gradle/
 EinMalEinsTrainer-Android/.idea/
@@ -11,6 +10,3 @@ EinMalEinsTrainer-Android/android/native/
 EinMalEinsTrainer-Android/android/caches/
 EinMalEinsTrainer-Android/android/wrapper/
 EinMalEinsTrainer-Android/android/daemon/
-
-=======
->>>>>>> origin/main
