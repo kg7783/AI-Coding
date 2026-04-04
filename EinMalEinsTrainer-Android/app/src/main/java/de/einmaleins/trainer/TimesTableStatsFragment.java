@@ -1,13 +1,11 @@
 package de.einmaleins.trainer;
 
-import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Checkable;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -18,8 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -41,7 +37,6 @@ public class TimesTableStatsFragment extends Fragment {
     private Button btnEndDate;
     private long customStartDate = 0;
     private long customEndDate = 0;
-    private boolean userSelectedEndDate = false;
 
     public static TimesTableStatsFragment newInstance() {
         return new TimesTableStatsFragment();
@@ -65,8 +60,10 @@ public class TimesTableStatsFragment extends Fragment {
 
         initViews(view);
         setupDateButtons();
-        loadLastFilter();
+        StatsFilterHelper.loadLastFilter(radioGroupFilter, radioCustom, configManager, false);
         setupRadioGroup();
+        StatisticsCalculator.TimeFilter currentFilter = getCurrentFilter();
+        updateStatistics(currentFilter);
     }
 
     @Override
@@ -104,151 +101,9 @@ public class TimesTableStatsFragment extends Fragment {
     }
 
     private void setupRadioGroup() {
-        if (radioGroupFilter == null) return;
-
-        radioGroupFilter.setOnCheckedChangeListener((group, checkedId) -> {
-            if (sessionManager == null || configManager == null) return;
-
-            StatisticsCalculator.TimeFilter filter = StatisticsCalculator.TimeFilter.ALL;
-
-            if (checkedId == R.id.radioToday) {
-                filter = StatisticsCalculator.TimeFilter.TODAY;
-                if (radioCustom != null) {
-                    radioCustom.setChecked(false);
-                }
-            } else if (checkedId == R.id.radioWeek) {
-                filter = StatisticsCalculator.TimeFilter.WEEK;
-                if (radioCustom != null) {
-                    radioCustom.setChecked(false);
-                }
-            } else if (checkedId == R.id.radioMonth) {
-                filter = StatisticsCalculator.TimeFilter.MONTH;
-                if (radioCustom != null) {
-                    radioCustom.setChecked(false);
-                }
-            } else if (checkedId == R.id.radioAll) {
-                filter = StatisticsCalculator.TimeFilter.ALL;
-                if (radioCustom != null) {
-                    radioCustom.setChecked(false);
-                }
-            }
-
-            updateStatistics(filter);
-        });
-
-        if (radioCustom != null) {
-            radioCustom.setOnClickListener(v -> {
-                if (sessionManager == null || configManager == null) return;
-
-                radioGroupFilter.clearCheck();
-                radioCustom.setChecked(true);
-                updateStatistics(StatisticsCalculator.TimeFilter.CUSTOM);
-            });
-        }
-    }
-
-    private void setupDateButtons() {
-        if (btnStartDate == null || btnEndDate == null || configManager == null) return;
-
-        customStartDate = configManager.getCustomStartDateSeries();
-        customEndDate = configManager.getCustomEndDateSeries();
-
-        if (customStartDate == 0) {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            customStartDate = cal.getTimeInMillis();
-        }
-
-        if (customEndDate == 0) {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, 23);
-            cal.set(Calendar.MINUTE, 59);
-            cal.set(Calendar.SECOND, 59);
-            cal.set(Calendar.MILLISECOND, 999);
-            customEndDate = cal.getTimeInMillis();
-        }
-
-        updateDateButtonsDisplay();
-
-        btnStartDate.setOnClickListener(v -> showDatePicker(true));
-        btnEndDate.setOnClickListener(v -> showDatePicker(false));
-    }
-
-    private void showDatePicker(boolean isStartDate) {
-        Calendar cal = Calendar.getInstance();
-        if (isStartDate && customStartDate > 0) {
-            cal.setTimeInMillis(customStartDate);
-        } else if (!isStartDate && customEndDate > 0) {
-            cal.setTimeInMillis(customEndDate);
-        }
-
-        DatePickerDialog dialog = new DatePickerDialog(
-                requireContext(),
-                (view, year, month, dayOfMonth) -> {
-                    Calendar selectedCal = Calendar.getInstance();
-                    if (isStartDate) {
-                        selectedCal.set(year, month, dayOfMonth, 0, 0, 0);
-                        selectedCal.set(Calendar.MILLISECOND, 0);
-                        customStartDate = selectedCal.getTimeInMillis();
-                        userSelectedEndDate = false;
-                    } else {
-                        selectedCal.set(year, month, dayOfMonth, 23, 59, 59);
-                        selectedCal.set(Calendar.MILLISECOND, 999);
-                        customEndDate = selectedCal.getTimeInMillis();
-                        userSelectedEndDate = true;
-                    }
-                    validateAndUpdateDates();
-                },
-                cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)
+        StatsFilterHelper.setupRadioGroup(
+            radioGroupFilter, radioCustom, configManager, false, this::updateStatistics
         );
-        dialog.show();
-    }
-
-    private void updateDateButtonsDisplay() {
-        java.text.DateFormat dateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM, Locale.GERMAN);
-        btnStartDate.setText(dateFormat.format(customStartDate));
-        btnEndDate.setText(dateFormat.format(customEndDate));
-    }
-
-    private void loadLastFilter() {
-        if (configManager == null) return;
-
-        String lastFilter = configManager.getLastFilterSeries();
-
-        if ("CUSTOM".equals(lastFilter)) {
-            if (radioCustom != null) {
-                radioCustom.setChecked(true);
-            }
-            radioGroupFilter.clearCheck();
-        } else {
-            if (radioCustom != null) {
-                radioCustom.setChecked(false);
-            }
-            int radioId = R.id.radioAll;
-            if ("TODAY".equals(lastFilter)) {
-                radioId = R.id.radioToday;
-            } else if ("WEEK".equals(lastFilter)) {
-                radioId = R.id.radioWeek;
-            } else if ("MONTH".equals(lastFilter)) {
-                radioId = R.id.radioMonth;
-            }
-            radioGroupFilter.check(radioId);
-        }
-    }
-
-    private void validateAndUpdateDates() {
-        if (customStartDate > 0 && customEndDate > 0 && customEndDate < customStartDate) {
-            return;
-        }
-
-        configManager.saveCustomDateRangeSeries(customStartDate, customEndDate);
-        updateDateButtonsDisplay();
-        updateStatistics(StatisticsCalculator.TimeFilter.CUSTOM);
     }
 
     private StatisticsCalculator.TimeFilter getCurrentFilter() {
@@ -269,15 +124,45 @@ public class TimesTableStatsFragment extends Fragment {
         return StatisticsCalculator.TimeFilter.ALL;
     }
 
+    private void setupDateButtons() {
+        StatsFilterHelper.DateRangeData dates = 
+            StatsFilterHelper.initDateRange(configManager, false);
+        customStartDate = dates.startDate;
+        customEndDate = dates.endDate;
+        
+        StatsFilterHelper.updateDateButtonsDisplay(btnStartDate, btnEndDate, 
+                                                  customStartDate, customEndDate);
+        
+        btnStartDate.setOnClickListener(v -> 
+            StatsFilterHelper.showDatePicker(this, true, customStartDate, this::onDateChanged));
+        btnEndDate.setOnClickListener(v -> 
+            StatsFilterHelper.showDatePicker(this, false, customEndDate, this::onDateChanged));
+    }
+
+    private void onDateChanged(long newDate, boolean isStartDate) {
+        if (isStartDate) {
+            customStartDate = newDate;
+        } else {
+            customEndDate = newDate;
+        }
+        
+        StatsFilterHelper.saveDateRange(configManager, false, customStartDate, customEndDate);
+        StatsFilterHelper.updateDateButtonsDisplay(btnStartDate, btnEndDate, 
+                                                  customStartDate, customEndDate);
+        
+        if (radioCustom != null) {
+            radioCustom.setChecked(true);
+        }
+        if (radioGroupFilter != null) {
+            radioGroupFilter.clearCheck();
+        }
+        
+        updateStatistics(StatisticsCalculator.TimeFilter.CUSTOM);
+    }
+
     private void updateStatistics(StatisticsCalculator.TimeFilter filter) {
         if (sessionManager == null || configManager == null) return;
         if (multSeriesViews == null || divSeriesViews == null) return;
-
-        if (filter == StatisticsCalculator.TimeFilter.CUSTOM) {
-            configManager.saveLastFilterSeries("CUSTOM");
-        } else {
-            configManager.saveLastFilterSeries(filter.name());
-        }
 
         List<ProgressSession> sessions = sessionManager.loadSessions();
 
@@ -293,14 +178,6 @@ public class TimesTableStatsFragment extends Fragment {
 
         updateSeriesViews(multSeriesViews, stats.multAccuracy, stats.multCorrect, stats.multWrong, "×", config);
         updateSeriesViews(divSeriesViews, stats.divAccuracy, stats.divCorrect, stats.divWrong, "÷", config);
-    }
-
-    private int getTotalFromMap(java.util.HashMap<Integer, Integer> map) {
-        int total = 0;
-        for (Integer val : map.values()) {
-            total += val;
-        }
-        return total;
     }
 
     private void updateSeriesViews(View[] seriesViews, HashMap<Integer, Double> accuracyMap,

@@ -1,6 +1,5 @@
 package de.einmaleins.trainer;
 
-import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,9 +9,6 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
-import java.util.Calendar;
-import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -73,9 +69,10 @@ public class StatisticsFragment extends Fragment {
         initViews(view);
         setupDateButtons();
         setupCharts();
+        StatsFilterHelper.loadLastFilter(radioGroupFilter, radioCustom, configManager, true);
         setupRadioGroup();
-        loadLastFilter();
-        updateStatistics(StatisticsCalculator.TimeFilter.ALL);
+        StatisticsCalculator.TimeFilter currentFilter = getCurrentFilter();
+        updateStatistics(currentFilter);
     }
 
     @Override
@@ -130,52 +127,9 @@ public class StatisticsFragment extends Fragment {
     }
 
     private void setupRadioGroup() {
-        if (radioGroupFilter == null) return;
-        
-        radioGroupFilter.setOnCheckedChangeListener((group, checkedId) -> {
-            if (sessionManager == null) return;
-            
-            StatisticsCalculator.TimeFilter filter = StatisticsCalculator.TimeFilter.ALL;
-            
-            if (checkedId == R.id.radioToday) {
-                filter = StatisticsCalculator.TimeFilter.TODAY;
-                if (radioCustom != null) {
-                    radioCustom.setChecked(false);
-                }
-            } else if (checkedId == R.id.radioWeek) {
-                filter = StatisticsCalculator.TimeFilter.WEEK;
-                if (radioCustom != null) {
-                    radioCustom.setChecked(false);
-                }
-            } else if (checkedId == R.id.radioMonth) {
-                filter = StatisticsCalculator.TimeFilter.MONTH;
-                if (radioCustom != null) {
-                    radioCustom.setChecked(false);
-                }
-            } else if (checkedId == R.id.radioAll) {
-                filter = StatisticsCalculator.TimeFilter.ALL;
-                if (radioCustom != null) {
-                    radioCustom.setChecked(false);
-                }
-            }
-            
-            if (configManager != null) {
-                configManager.saveLastFilterStats(filter.name());
-            }
-            updateStatistics(filter);
-        });
-
-        if (radioCustom != null) {
-            radioCustom.setOnClickListener(v -> {
-                if (sessionManager == null) return;
-                radioGroupFilter.clearCheck();
-                radioCustom.setChecked(true);
-                if (configManager != null) {
-                    configManager.saveLastFilterStats("CUSTOM");
-                }
-                updateStatistics(StatisticsCalculator.TimeFilter.CUSTOM);
-            });
-        }
+        StatsFilterHelper.setupRadioGroup(
+            radioGroupFilter, radioCustom, configManager, true, this::updateStatistics
+        );
     }
 
     private StatisticsCalculator.TimeFilter getCurrentFilter() {
@@ -195,111 +149,40 @@ public class StatisticsFragment extends Fragment {
         return StatisticsCalculator.TimeFilter.ALL;
     }
 
-    private void loadLastFilter() {
-        if (configManager == null) return;
-
-        String lastFilter = configManager.getLastFilterStats();
-
-        if ("CUSTOM".equals(lastFilter)) {
-            if (radioCustom != null) {
-                radioCustom.setChecked(true);
-            }
-            if (radioGroupFilter != null) {
-                radioGroupFilter.clearCheck();
-            }
-        } else {
-            if (radioCustom != null) {
-                radioCustom.setChecked(false);
-            }
-            if (radioGroupFilter != null) {
-                int radioId = R.id.radioAll;
-                if ("TODAY".equals(lastFilter)) {
-                    radioId = R.id.radioToday;
-                } else if ("WEEK".equals(lastFilter)) {
-                    radioId = R.id.radioWeek;
-                } else if ("MONTH".equals(lastFilter)) {
-                    radioId = R.id.radioMonth;
-                }
-                radioGroupFilter.check(radioId);
-            }
-        }
-    }
-
     private void setupDateButtons() {
-        if (btnStartDate == null || btnEndDate == null || configManager == null) return;
-
-        customStartDate = configManager.getCustomStartDateStats();
-        customEndDate = configManager.getCustomEndDateStats();
-
-        if (customStartDate == 0) {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            customStartDate = cal.getTimeInMillis();
-        }
-
-        if (customEndDate == 0) {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, 23);
-            cal.set(Calendar.MINUTE, 59);
-            cal.set(Calendar.SECOND, 59);
-            cal.set(Calendar.MILLISECOND, 999);
-            customEndDate = cal.getTimeInMillis();
-        }
-
-        updateDateButtonsDisplay();
-
-        btnStartDate.setOnClickListener(v -> showDatePicker(true));
-        btnEndDate.setOnClickListener(v -> showDatePicker(false));
+        StatsFilterHelper.DateRangeData dates = 
+            StatsFilterHelper.initDateRange(configManager, true);
+        customStartDate = dates.startDate;
+        customEndDate = dates.endDate;
+        
+        StatsFilterHelper.updateDateButtonsDisplay(btnStartDate, btnEndDate, 
+                                                  customStartDate, customEndDate);
+        
+        btnStartDate.setOnClickListener(v -> 
+            StatsFilterHelper.showDatePicker(this, true, customStartDate, this::onDateChanged));
+        btnEndDate.setOnClickListener(v -> 
+            StatsFilterHelper.showDatePicker(this, false, customEndDate, this::onDateChanged));
     }
 
-    private void showDatePicker(boolean isStartDate) {
-        Calendar cal = Calendar.getInstance();
-        if (isStartDate && customStartDate > 0) {
-            cal.setTimeInMillis(customStartDate);
-        } else if (!isStartDate && customEndDate > 0) {
-            cal.setTimeInMillis(customEndDate);
+    private void onDateChanged(long newDate, boolean isStartDate) {
+        if (isStartDate) {
+            customStartDate = newDate;
+        } else {
+            customEndDate = newDate;
         }
-
-        DatePickerDialog dialog = new DatePickerDialog(
-                requireContext(),
-                (view, year, month, dayOfMonth) -> {
-                    Calendar selectedCal = Calendar.getInstance();
-                    if (isStartDate) {
-                        selectedCal.set(year, month, dayOfMonth, 0, 0, 0);
-                        selectedCal.set(Calendar.MILLISECOND, 0);
-                        customStartDate = selectedCal.getTimeInMillis();
-                    } else {
-                        selectedCal.set(year, month, dayOfMonth, 23, 59, 59);
-                        selectedCal.set(Calendar.MILLISECOND, 999);
-                        customEndDate = selectedCal.getTimeInMillis();
-                    }
-                    configManager.saveCustomDateRangeStats(customStartDate, customEndDate);
-                    if (radioCustom != null) {
-                        radioCustom.setChecked(true);
-                    }
-                    if (radioGroupFilter != null) {
-                        radioGroupFilter.clearCheck();
-                    }
-                    if (configManager != null) {
-                        configManager.saveLastFilterStats("CUSTOM");
-                    }
-                    updateDateButtonsDisplay();
-                    updateStatistics(StatisticsCalculator.TimeFilter.CUSTOM);
-                },
-                cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)
-        );
-        dialog.show();
-    }
-
-    private void updateDateButtonsDisplay() {
-        java.text.DateFormat dateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM, Locale.GERMAN);
-        btnStartDate.setText(dateFormat.format(customStartDate));
-        btnEndDate.setText(dateFormat.format(customEndDate));
+        
+        StatsFilterHelper.saveDateRange(configManager, true, customStartDate, customEndDate);
+        StatsFilterHelper.updateDateButtonsDisplay(btnStartDate, btnEndDate, 
+                                                  customStartDate, customEndDate);
+        
+        if (radioCustom != null) {
+            radioCustom.setChecked(true);
+        }
+        if (radioGroupFilter != null) {
+            radioGroupFilter.clearCheck();
+        }
+        
+        updateStatistics(StatisticsCalculator.TimeFilter.CUSTOM);
     }
 
     private void updateStatistics(StatisticsCalculator.TimeFilter filter) {
