@@ -56,67 +56,45 @@
 
             </RadioGroup>
 
-            <RadioButton
-                android:id="@+id/radioCustom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Benutzerdefiniert"
-                android:padding="8dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/customDateContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="16dp"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tvSelectedDateRange"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#333333"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Von:"
-                android:textColor="#333333"
-                android:textSize="14sp"
-                android:layout_marginBottom="4dp" />
-
-            <CalendarView
-                android:id="@+id/calendarStartDate"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bis:"
-                android:textColor="#333333"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="4dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <CalendarView
-                android:id="@+id/calendarEndDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <RadioButton
+                    android:id="@+id/radioCustom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Benutzerdefiniert"
+                    android:padding="8dp" />
 
-            <TextView
-                android:id="@+id/tvDateError"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#DC143C"
-                android:textSize="12sp"
-                android:visibility="gone"
-                android:layout_marginTop="4dp" />
+                <LinearLayout
+                    android:id="@+id/customDateContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnStartDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="@string/btn_start_date"
+                        android:layout_marginEnd="8dp"
+                        android:minWidth="80dp"
+                        android:textSize="12sp" />
+
+                    <Button
+                        android:id="@+id/btnEndDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="@string/btn_end_date"
+                        android:minWidth="80dp"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 

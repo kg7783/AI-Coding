@@ -9,9 +9,12 @@ public class ConfigManager {
     private static final String PREFS_NAME = "EinMalEinsConfig";
     private static final String KEY_BASE_NUMBERS = "baseNumbers";
     private static final String KEY_MULTIPLIERS = "multipliers";
-    private static final String KEY_CUSTOM_START_DATE = "custom_start_date";
-    private static final String KEY_CUSTOM_END_DATE = "custom_end_date";
-    private static final String KEY_LAST_FILTER = "last_filter";
+    private static final String KEY_CUSTOM_START_DATE_STATS = "custom_start_date_stats";
+    private static final String KEY_CUSTOM_END_DATE_STATS = "custom_end_date_stats";
+    private static final String KEY_CUSTOM_START_DATE_SERIES = "custom_start_date_series";
+    private static final String KEY_CUSTOM_END_DATE_SERIES = "custom_end_date_series";
+    private static final String KEY_LAST_FILTER_STATS = "last_filter_stats";
+    private static final String KEY_LAST_FILTER_SERIES = "last_filter_series";
 
     private SharedPreferences prefs;
 
@@ -92,29 +95,54 @@ public class ConfigManager {
         return prefs.contains(KEY_BASE_NUMBERS);
     }
 
-    public void saveCustomDateRange(long startDate, long endDate) {
+    public void saveCustomDateRangeStats(long startDate, long endDate) {
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(KEY_CUSTOM_START_DATE, startDate);
-        editor.putLong(KEY_CUSTOM_END_DATE, endDate);
+        editor.putLong(KEY_CUSTOM_START_DATE_STATS, startDate);
+        editor.putLong(KEY_CUSTOM_END_DATE_STATS, endDate);
         editor.apply();
     }
 
-    public long getCustomStartDate() {
-        long defaultStart = getStartOfDay(7);
-        return prefs.getLong(KEY_CUSTOM_START_DATE, defaultStart);
+    public long getCustomStartDateStats() {
+        long defaultStart = getStartOfDay(0);
+        return prefs.getLong(KEY_CUSTOM_START_DATE_STATS, defaultStart);
     }
 
-    public long getCustomEndDate() {
-        long defaultEnd = getStartOfDay(0);
-        return prefs.getLong(KEY_CUSTOM_END_DATE, defaultEnd);
+    public long getCustomEndDateStats() {
+        long defaultEnd = getEndOfDay(0);
+        return prefs.getLong(KEY_CUSTOM_END_DATE_STATS, defaultEnd);
     }
 
-    public void saveLastFilter(String filterName) {
-        prefs.edit().putString(KEY_LAST_FILTER, filterName).apply();
+    public void saveCustomDateRangeSeries(long startDate, long endDate) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong(KEY_CUSTOM_START_DATE_SERIES, startDate);
+        editor.putLong(KEY_CUSTOM_END_DATE_SERIES, endDate);
+        editor.apply();
     }
 
-    public String getLastFilter() {
-        return prefs.getString(KEY_LAST_FILTER, "ALL");
+    public long getCustomStartDateSeries() {
+        long defaultStart = getStartOfDay(0);
+        return prefs.getLong(KEY_CUSTOM_START_DATE_SERIES, defaultStart);
+    }
+
+    public long getCustomEndDateSeries() {
+        long defaultEnd = getEndOfDay(0);
+        return prefs.getLong(KEY_CUSTOM_END_DATE_SERIES, defaultEnd);
+    }
+
+    public void saveLastFilterStats(String filterName) {
+        prefs.edit().putString(KEY_LAST_FILTER_STATS, filterName).apply();
+    }
+
+    public String getLastFilterStats() {
+        return prefs.getString(KEY_LAST_FILTER_STATS, "ALL");
+    }
+
+    public void saveLastFilterSeries(String filterName) {
+        prefs.edit().putString(KEY_LAST_FILTER_SERIES, filterName).apply();
+    }
+
+    public String getLastFilterSeries() {
+        return prefs.getString(KEY_LAST_FILTER_SERIES, "ALL");
     }
 
     private long getStartOfDay(int daysAgo) {
@@ -124,6 +152,16 @@ public class ConfigManager {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTimeInMillis();
+    }
+
+    private long getEndOfDay(int daysAgo) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -daysAgo);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
         return calendar.getTimeInMillis();
     }
 }

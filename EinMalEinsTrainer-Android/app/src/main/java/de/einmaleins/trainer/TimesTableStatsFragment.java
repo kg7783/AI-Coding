@@ -1,11 +1,12 @@
 package de.einmaleins.trainer;
 
+import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
+import android.widget.Button;
 import android.widget.Checkable;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -36,11 +37,8 @@ public class TimesTableStatsFragment extends Fragment {
     private RadioButton radioCustom;
     private View[] multSeriesViews;
     private View[] divSeriesViews;
-    private View customDateContainer;
-    private CalendarView calendarStartDate;
-    private CalendarView calendarEndDate;
-    private TextView tvDateError;
-    private TextView tvSelectedDateRange;
+    private Button btnStartDate;
+    private Button btnEndDate;
     private long customStartDate = 0;
     private long customEndDate = 0;
     private boolean userSelectedEndDate = false;
@@ -66,7 +64,7 @@ public class TimesTableStatsFragment extends Fragment {
         }
 
         initViews(view);
-        setupCalendarViews();
+        setupDateButtons();
         loadLastFilter();
         setupRadioGroup();
     }
@@ -83,11 +81,8 @@ public class TimesTableStatsFragment extends Fragment {
     private void initViews(View view) {
         radioGroupFilter = view.findViewById(R.id.radioGroupFilter);
         radioCustom = view.findViewById(R.id.radioCustom);
-        customDateContainer = view.findViewById(R.id.customDateContainer);
-        calendarStartDate = view.findViewById(R.id.calendarStartDate);
-        calendarEndDate = view.findViewById(R.id.calendarEndDate);
-        tvDateError = view.findViewById(R.id.tvDateError);
-        tvSelectedDateRange = view.findViewById(R.id.tvSelectedDateRange);
+        btnStartDate = view.findViewById(R.id.btnStartDate);
+        btnEndDate = view.findViewById(R.id.btnEndDate);
 
         multSeriesViews = new View[10];
         divSeriesViews = new View[10];
@@ -118,33 +113,21 @@ public class TimesTableStatsFragment extends Fragment {
 
             if (checkedId == R.id.radioToday) {
                 filter = StatisticsCalculator.TimeFilter.TODAY;
-                if (customDateContainer != null) {
-                    customDateContainer.setVisibility(View.GONE);
-                }
                 if (radioCustom != null) {
                     radioCustom.setChecked(false);
                 }
             } else if (checkedId == R.id.radioWeek) {
                 filter = StatisticsCalculator.TimeFilter.WEEK;
-                if (customDateContainer != null) {
-                    customDateContainer.setVisibility(View.GONE);
-                }
                 if (radioCustom != null) {
                     radioCustom.setChecked(false);
                 }
             } else if (checkedId == R.id.radioMonth) {
                 filter = StatisticsCalculator.TimeFilter.MONTH;
-                if (customDateContainer != null) {
-                    customDateContainer.setVisibility(View.GONE);
-                }
                 if (radioCustom != null) {
                     radioCustom.setChecked(false);
                 }
             } else if (checkedId == R.id.radioAll) {
                 filter = StatisticsCalculator.TimeFilter.ALL;
-                if (customDateContainer != null) {
-                    customDateContainer.setVisibility(View.GONE);
-                }
                 if (radioCustom != null) {
                     radioCustom.setChecked(false);
                 }
@@ -159,61 +142,89 @@ public class TimesTableStatsFragment extends Fragment {
 
                 radioGroupFilter.clearCheck();
                 radioCustom.setChecked(true);
-                
-                if (customDateContainer != null) {
-                    customDateContainer.setVisibility(View.VISIBLE);
-                }
                 updateStatistics(StatisticsCalculator.TimeFilter.CUSTOM);
             });
         }
     }
 
-    private void setupCalendarViews() {
-        if (calendarStartDate == null || calendarEndDate == null || configManager == null) return;
+    private void setupDateButtons() {
+        if (btnStartDate == null || btnEndDate == null || configManager == null) return;
 
-        customStartDate = configManager.getCustomStartDate();
-        customEndDate = configManager.getCustomEndDate();
+        customStartDate = configManager.getCustomStartDateSeries();
+        customEndDate = configManager.getCustomEndDateSeries();
 
-        if (customStartDate > 0) {
-            calendarStartDate.setDate(customStartDate);
-        }
-        if (customEndDate > 0) {
-            calendarEndDate.setDate(customEndDate);
-        }
-        updateDateRangeDisplay();
-
-        calendarStartDate.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+        if (customStartDate == 0) {
             Calendar cal = Calendar.getInstance();
-            cal.set(year, month, dayOfMonth, 0, 0, 0);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
             customStartDate = cal.getTimeInMillis();
-            userSelectedEndDate = false;
-            validateAndUpdateDates();
-        });
+        }
 
-        calendarEndDate.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+        if (customEndDate == 0) {
             Calendar cal = Calendar.getInstance();
-            cal.set(year, month, dayOfMonth, 23, 59, 59);
+            cal.set(Calendar.HOUR_OF_DAY, 23);
+            cal.set(Calendar.MINUTE, 59);
+            cal.set(Calendar.SECOND, 59);
             cal.set(Calendar.MILLISECOND, 999);
             customEndDate = cal.getTimeInMillis();
-            userSelectedEndDate = true;
-            validateAndUpdateDates();
-        });
+        }
+
+        updateDateButtonsDisplay();
+
+        btnStartDate.setOnClickListener(v -> showDatePicker(true));
+        btnEndDate.setOnClickListener(v -> showDatePicker(false));
+    }
+
+    private void showDatePicker(boolean isStartDate) {
+        Calendar cal = Calendar.getInstance();
+        if (isStartDate && customStartDate > 0) {
+            cal.setTimeInMillis(customStartDate);
+        } else if (!isStartDate && customEndDate > 0) {
+            cal.setTimeInMillis(customEndDate);
+        }
+
+        DatePickerDialog dialog = new DatePickerDialog(
+                requireContext(),
+                (view, year, month, dayOfMonth) -> {
+                    Calendar selectedCal = Calendar.getInstance();
+                    if (isStartDate) {
+                        selectedCal.set(year, month, dayOfMonth, 0, 0, 0);
+                        selectedCal.set(Calendar.MILLISECOND, 0);
+                        customStartDate = selectedCal.getTimeInMillis();
+                        userSelectedEndDate = false;
+                    } else {
+                        selectedCal.set(year, month, dayOfMonth, 23, 59, 59);
+                        selectedCal.set(Calendar.MILLISECOND, 999);
+                        customEndDate = selectedCal.getTimeInMillis();
+                        userSelectedEndDate = true;
+                    }
+                    validateAndUpdateDates();
+                },
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
+        );
+        dialog.show();
+    }
+
+    private void updateDateButtonsDisplay() {
+        java.text.DateFormat dateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM, Locale.GERMAN);
+        btnStartDate.setText(dateFormat.format(customStartDate));
+        btnEndDate.setText(dateFormat.format(customEndDate));
     }
 
     private void loadLastFilter() {
         if (configManager == null) return;
 
-        String lastFilter = configManager.getLastFilter();
+        String lastFilter = configManager.getLastFilterSeries();
 
         if ("CUSTOM".equals(lastFilter)) {
             if (radioCustom != null) {
                 radioCustom.setChecked(true);
             }
             radioGroupFilter.clearCheck();
-            if (customDateContainer != null) {
-                customDateContainer.setVisibility(View.VISIBLE);
-            }
         } else {
             if (radioCustom != null) {
                 radioCustom.setChecked(false);
@@ -231,41 +242,13 @@ public class TimesTableStatsFragment extends Fragment {
     }
 
     private void validateAndUpdateDates() {
-        if (tvDateError != null && customStartDate > 0 && customEndDate > 0 && customEndDate < customStartDate) {
-            tvDateError.setVisibility(View.VISIBLE);
-            tvDateError.setText("Enddatum muss nach Startdatum liegen");
+        if (customStartDate > 0 && customEndDate > 0 && customEndDate < customStartDate) {
             return;
         }
 
-        if (tvDateError != null) {
-            tvDateError.setVisibility(View.GONE);
-        }
-        configManager.saveCustomDateRange(customStartDate, customEndDate);
-        updateDateRangeDisplay();
+        configManager.saveCustomDateRangeSeries(customStartDate, customEndDate);
+        updateDateButtonsDisplay();
         updateStatistics(StatisticsCalculator.TimeFilter.CUSTOM);
-
-        if (userSelectedEndDate && customEndDate > customStartDate) {
-            customDateContainer.setVisibility(View.GONE);
-        }
-    }
-
-    private void updateDateRangeDisplay() {
-        if (tvSelectedDateRange == null) return;
-
-        if (customStartDate > 0 && customEndDate > 0) {
-            java.text.DateFormat dateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM, Locale.GERMAN);
-            String startStr = dateFormat.format(customStartDate);
-            String endStr = dateFormat.format(customEndDate);
-            tvSelectedDateRange.setText(startStr + " - " + endStr);
-        } else if (customStartDate > 0) {
-            java.text.DateFormat dateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM, Locale.GERMAN);
-            tvSelectedDateRange.setText("Ab " + dateFormat.format(customStartDate));
-        } else if (customEndDate > 0) {
-            java.text.DateFormat dateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM, Locale.GERMAN);
-            tvSelectedDateRange.setText("Bis " + dateFormat.format(customEndDate));
-        } else {
-            tvSelectedDateRange.setText("");
-        }
     }
 
     private StatisticsCalculator.TimeFilter getCurrentFilter() {
@@ -291,9 +274,9 @@ public class TimesTableStatsFragment extends Fragment {
         if (multSeriesViews == null || divSeriesViews == null) return;
 
         if (filter == StatisticsCalculator.TimeFilter.CUSTOM) {
-            configManager.saveLastFilter("CUSTOM");
+            configManager.saveLastFilterSeries("CUSTOM");
         } else {
-            configManager.saveLastFilter(filter.name());
+            configManager.saveLastFilterSeries(filter.name());
         }
 
         List<ProgressSession> sessions = sessionManager.loadSessions();

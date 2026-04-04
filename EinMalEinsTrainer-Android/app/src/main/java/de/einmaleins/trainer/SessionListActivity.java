@@ -1,8 +1,11 @@
 package de.einmaleins.trainer;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -15,11 +18,16 @@ public class SessionListActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ImageButton btnBack;
     private ImageButton btnClearAll;
+    private Handler handler;
+    private Runnable longClickRunnable;
+    private boolean isLongClickTriggered = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session_list);
+
+        handler = new Handler(Looper.getMainLooper());
 
         initViews();
         setupViewPager();
@@ -86,5 +94,41 @@ public class SessionListActivity extends AppCompatActivity {
                 });
             }
         });
+
+        longClickRunnable = () -> {
+            isLongClickTriggered = true;
+            showTestDataDialog();
+        };
+
+        btnClearAll.setOnLongClickListener(v -> {
+            isLongClickTriggered = false;
+            Toast.makeText(this, "5 Sekunden halten für Testdaten...", Toast.LENGTH_SHORT).show();
+            handler.postDelayed(longClickRunnable, 5000);
+            return true;
+        });
+
+        btnClearAll.setOnTouchListener((v, event) -> {
+            if (event.getAction() == android.view.MotionEvent.ACTION_UP || 
+                event.getAction() == android.view.MotionEvent.ACTION_CANCEL) {
+                handler.removeCallbacks(longClickRunnable);
+            }
+            return false;
+        });
+    }
+
+    private void showTestDataDialog() {
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Testdaten generieren")
+                .setMessage("Möchtest du 6 Test-Sessions erstellen?")
+                .setPositiveButton("Ja", (d, which) -> {
+                    TestDataGenerator.generateTestSessions(this);
+                    SessionListFragment fragment = (SessionListFragment) getSupportFragmentManager()
+                            .findFragmentByTag("f0");
+                    if (fragment != null) {
+                        fragment.updateSessions();
+                    }
+                })
+                .setNegativeButton("Nein", null)
+                .show();
     }
 }

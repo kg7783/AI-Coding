@@ -56,7 +56,9 @@ public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.ViewHold
     class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvDate;
         private final TextView tvCorrect;
+        private final TextView tvMultTotal;
         private final TextView tvWrong;
+        private final TextView tvDivTotal;
         private final TextView tvAccuracy;
         private final ImageButton btnDelete;
 
@@ -64,7 +66,9 @@ public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.ViewHold
             super(itemView);
             tvDate = itemView.findViewById(R.id.tvDate);
             tvCorrect = itemView.findViewById(R.id.tvCorrect);
+            tvMultTotal = itemView.findViewById(R.id.tvMultTotal);
             tvWrong = itemView.findViewById(R.id.tvWrong);
+            tvDivTotal = itemView.findViewById(R.id.tvDivTotal);
             tvAccuracy = itemView.findViewById(R.id.tvAccuracy);
             btnDelete = itemView.findViewById(R.id.btnDelete);
         }
@@ -77,7 +81,9 @@ public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.ViewHold
             tvDate.setText(startTime + " - " + endTime);
             
             tvCorrect.setText(String.format(Locale.GERMAN, "%d", session.getCorrectAnswers()));
+            tvMultTotal.setText(String.format(Locale.GERMAN, "%d", session.getTotalMult()));
             tvWrong.setText(String.format(Locale.GERMAN, "%d", session.getWrongAnswers()));
+            tvDivTotal.setText(String.format(Locale.GERMAN, "%d", session.getTotalDiv()));
             tvAccuracy.setText(String.format(Locale.GERMAN, "%.0f%%", session.getAccuracy()));
 
             btnDelete.setOnClickListener(v -> {

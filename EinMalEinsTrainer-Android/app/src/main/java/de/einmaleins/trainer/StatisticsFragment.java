@@ -1,12 +1,18 @@
 package de.einmaleins.trainer;
 
+import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import java.util.Calendar;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,7 +38,13 @@ public class StatisticsFragment extends Fragment {
     private static final int COLOR_WRONG = Color.parseColor("#DC143C");
 
     private SessionManager sessionManager;
+    private ConfigManager configManager;
     private RadioGroup radioGroupFilter;
+    private RadioButton radioCustom;
+    private Button btnStartDate;
+    private Button btnEndDate;
+    private long customStartDate = 0;
+    private long customEndDate = 0;
     private TextView tvTotalSessions, tvTotalAttempts, tvAverageAccuracy;
     private TextView tvCorrectCount, tvWrongCount;
     private PieChart pieChart;
@@ -55,11 +67,14 @@ public class StatisticsFragment extends Fragment {
         
         if (getContext() != null) {
             sessionManager = new SessionManager(getContext());
+            configManager = new ConfigManager(getContext());
         }
         
         initViews(view);
+        setupDateButtons();
         setupCharts();
         setupRadioGroup();
+        loadLastFilter();
         updateStatistics(StatisticsCalculator.TimeFilter.ALL);
     }
 
@@ -74,6 +89,9 @@ public class StatisticsFragment extends Fragment {
 
     private void initViews(View view) {
         radioGroupFilter = view.findViewById(R.id.radioGroupFilter);
+        radioCustom = view.findViewById(R.id.radioCustom);
+        btnStartDate = view.findViewById(R.id.btnStartDate);
+        btnEndDate = view.findViewById(R.id.btnEndDate);
         
         tvTotalSessions = view.findViewById(R.id.tvTotalSessions);
         tvTotalAttempts = view.findViewById(R.id.tvTotalAttempts);
@@ -121,17 +139,49 @@ public class StatisticsFragment extends Fragment {
             
             if (checkedId == R.id.radioToday) {
                 filter = StatisticsCalculator.TimeFilter.TODAY;
+                if (radioCustom != null) {
+                    radioCustom.setChecked(false);
+                }
             } else if (checkedId == R.id.radioWeek) {
                 filter = StatisticsCalculator.TimeFilter.WEEK;
+                if (radioCustom != null) {
+                    radioCustom.setChecked(false);
+                }
             } else if (checkedId == R.id.radioMonth) {
                 filter = StatisticsCalculator.TimeFilter.MONTH;
+                if (radioCustom != null) {
+                    radioCustom.setChecked(false);
+                }
+            } else if (checkedId == R.id.radioAll) {
+                filter = StatisticsCalculator.TimeFilter.ALL;
+                if (radioCustom != null) {
+                    radioCustom.setChecked(false);
+                }
             }
             
+            if (configManager != null) {
+                configManager.saveLastFilterStats(filter.name());
+            }
             updateStatistics(filter);
         });
+
+        if (radioCustom != null) {
+            radioCustom.setOnClickListener(v -> {
+                if (sessionManager == null) return;
+                radioGroupFilter.clearCheck();
+                radioCustom.setChecked(true);
+                if (configManager != null) {
+                    configManager.saveLastFilterStats("CUSTOM");
+                }
+                updateStatistics(StatisticsCalculator.TimeFilter.CUSTOM);
+            });
+        }
     }
 
     private StatisticsCalculator.TimeFilter getCurrentFilter() {
+        if (radioCustom != null && radioCustom.isChecked()) {
+            return StatisticsCalculator.TimeFilter.CUSTOM;
+        }
         if (radioGroupFilter == null) return StatisticsCalculator.TimeFilter.ALL;
         
         int checkedId = radioGroupFilter.getCheckedRadioButtonId();
@@ -145,11 +195,124 @@ public class StatisticsFragment extends Fragment {
         return StatisticsCalculator.TimeFilter.ALL;
     }
 
+    private void loadLastFilter() {
+        if (configManager == null) return;
+
+        String lastFilter = configManager.getLastFilterStats();
+
+        if ("CUSTOM".equals(lastFilter)) {
+            if (radioCustom != null) {
+                radioCustom.setChecked(true);
+            }
+            if (radioGroupFilter != null) {
+                radioGroupFilter.clearCheck();
+            }
+        } else {
+            if (radioCustom != null) {
+                radioCustom.setChecked(false);
+            }
+            if (radioGroupFilter != null) {
+                int radioId = R.id.radioAll;
+                if ("TODAY".equals(lastFilter)) {
+                    radioId = R.id.radioToday;
+                } else if ("WEEK".equals(lastFilter)) {
+                    radioId = R.id.radioWeek;
+                } else if ("MONTH".equals(lastFilter)) {
+                    radioId = R.id.radioMonth;
+                }
+                radioGroupFilter.check(radioId);
+            }
+        }
+    }
+
+    private void setupDateButtons() {
+        if (btnStartDate == null || btnEndDate == null || configManager == null) return;
+
+        customStartDate = configManager.getCustomStartDateStats();
+        customEndDate = configManager.getCustomEndDateStats();
+
+        if (customStartDate == 0) {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            customStartDate = cal.getTimeInMillis();
+        }
+
+        if (customEndDate == 0) {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, 23);
+            cal.set(Calendar.MINUTE, 59);
+            cal.set(Calendar.SECOND, 59);
+            cal.set(Calendar.MILLISECOND, 999);
+            customEndDate = cal.getTimeInMillis();
+        }
+
+        updateDateButtonsDisplay();
+
+        btnStartDate.setOnClickListener(v -> showDatePicker(true));
+        btnEndDate.setOnClickListener(v -> showDatePicker(false));
+    }
+
+    private void showDatePicker(boolean isStartDate) {
+        Calendar cal = Calendar.getInstance();
+        if (isStartDate && customStartDate > 0) {
+            cal.setTimeInMillis(customStartDate);
+        } else if (!isStartDate && customEndDate > 0) {
+            cal.setTimeInMillis(customEndDate);
+        }
+
+        DatePickerDialog dialog = new DatePickerDialog(
+                requireContext(),
+                (view, year, month, dayOfMonth) -> {
+                    Calendar selectedCal = Calendar.getInstance();
+                    if (isStartDate) {
+                        selectedCal.set(year, month, dayOfMonth, 0, 0, 0);
+                        selectedCal.set(Calendar.MILLISECOND, 0);
+                        customStartDate = selectedCal.getTimeInMillis();
+                    } else {
+                        selectedCal.set(year, month, dayOfMonth, 23, 59, 59);
+                        selectedCal.set(Calendar.MILLISECOND, 999);
+                        customEndDate = selectedCal.getTimeInMillis();
+                    }
+                    configManager.saveCustomDateRangeStats(customStartDate, customEndDate);
+                    if (radioCustom != null) {
+                        radioCustom.setChecked(true);
+                    }
+                    if (radioGroupFilter != null) {
+                        radioGroupFilter.clearCheck();
+                    }
+                    if (configManager != null) {
+                        configManager.saveLastFilterStats("CUSTOM");
+                    }
+                    updateDateButtonsDisplay();
+                    updateStatistics(StatisticsCalculator.TimeFilter.CUSTOM);
+                },
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
+        );
+        dialog.show();
+    }
+
+    private void updateDateButtonsDisplay() {
+        java.text.DateFormat dateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM, Locale.GERMAN);
+        btnStartDate.setText(dateFormat.format(customStartDate));
+        btnEndDate.setText(dateFormat.format(customEndDate));
+    }
+
     private void updateStatistics(StatisticsCalculator.TimeFilter filter) {
         if (sessionManager == null || tvTotalSessions == null) return;
         
         List<ProgressSession> sessions = sessionManager.loadSessions();
-        StatisticsCalculator.Statistics stats = StatisticsCalculator.calculate(sessions, filter);
+        StatisticsCalculator.Statistics stats;
+
+        if (filter == StatisticsCalculator.TimeFilter.CUSTOM) {
+            stats = StatisticsCalculator.calculate(sessions, filter, customStartDate, customEndDate);
+        } else {
+            stats = StatisticsCalculator.calculate(sessions, filter);
+        }
 
         tvTotalSessions.setText(String.valueOf(stats.totalSessions));
         tvTotalAttempts.setText(String.valueOf(stats.totalAttempts));
@@ -198,7 +361,12 @@ public class StatisticsFragment extends Fragment {
                                 StatisticsCalculator.TimeFilter filter) {
         if (barChart == null) return;
         
-        List<ProgressSession> filteredSessions = filterSessions(sessions, filter);
+        List<ProgressSession> filteredSessions;
+        if (filter == StatisticsCalculator.TimeFilter.CUSTOM) {
+            filteredSessions = filterSessions(sessions, filter, customStartDate, customEndDate);
+        } else {
+            filteredSessions = filterSessions(sessions, filter);
+        }
         
         if (filteredSessions.isEmpty()) {
             barChart.setData(null);
@@ -237,10 +405,16 @@ public class StatisticsFragment extends Fragment {
 
     private List<ProgressSession> filterSessions(List<ProgressSession> sessions, 
                                                 StatisticsCalculator.TimeFilter filter) {
+        return filterSessions(sessions, filter, 0, 0);
+    }
+
+    private List<ProgressSession> filterSessions(List<ProgressSession> sessions, 
+                                                StatisticsCalculator.TimeFilter filter,
+                                                long customStart, long customEnd) {
         List<ProgressSession> result = new ArrayList<>();
         
         long startOfToday = 0, startOfWeek = 0, startOfMonth = 0;
-        if (filter != StatisticsCalculator.TimeFilter.ALL) {
+        if (filter != StatisticsCalculator.TimeFilter.ALL && filter != StatisticsCalculator.TimeFilter.CUSTOM) {
             java.util.Calendar calendar = java.util.Calendar.getInstance();
             calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
             calendar.set(java.util.Calendar.MINUTE, 0);
@@ -266,6 +440,13 @@ public class StatisticsFragment extends Fragment {
                     break;
                 case MONTH:
                     if (session.getStartTimestamp() >= startOfMonth) result.add(session);
+                    break;
+                case CUSTOM:
+                    if (customStart > 0 && customEnd > 0) {
+                        if (session.getStartTimestamp() >= customStart && session.getStartTimestamp() <= customEnd) {
+                            result.add(session);
+                        }
+                    }
                     break;
             }
         }

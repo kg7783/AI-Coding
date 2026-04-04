@@ -146,4 +146,20 @@ public class ProgressSession {
         this.divCorrect = divC;
         this.divWrong = divW;
     }
+
+    public int getTotalMult() {
+        int total = 0;
+        for (int i = 1; i <= 10; i++) {
+            total += getMultCorrectForSeries(i) + getMultWrongForSeries(i);
+        }
+        return total;
+    }
+
+    public int getTotalDiv() {
+        int total = 0;
+        for (int i = 1; i <= 10; i++) {
+            total += getDivCorrectForSeries(i) + getDivWrongForSeries(i);
+        }
+        return total;
+    }
 }
