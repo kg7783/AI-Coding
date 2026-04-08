@@ -9,6 +9,7 @@ public class ConfigManager {
     private static final String PREFS_NAME = "EinMalEinsConfig";
     private static final String KEY_BASE_NUMBERS = "baseNumbers";
     private static final String KEY_MULTIPLIERS = "multipliers";
+    private static final String KEY_AUTO_SWITCH_MODE = "autoSwitchMode";
     private static final String KEY_CUSTOM_START_DATE_STATS = "custom_start_date_stats";
     private static final String KEY_CUSTOM_END_DATE_STATS = "custom_end_date_stats";
     private static final String KEY_CUSTOM_START_DATE_SERIES = "custom_start_date_series";
@@ -45,6 +46,7 @@ public class ConfigManager {
             editor.putString(KEY_MULTIPLIERS + i, multBuilder.toString());
         }
 
+        editor.putBoolean(KEY_AUTO_SWITCH_MODE, config.autoSwitchMode);
         editor.apply();
     }
 
@@ -78,6 +80,8 @@ public class ConfigManager {
                 }
             }
         }
+
+        config.autoSwitchMode = prefs.getBoolean(KEY_AUTO_SWITCH_MODE, true);
 
         if (config.baseNumbers.isEmpty()) {
             for (int i = 1; i <= 10; i++) {

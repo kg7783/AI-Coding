@@ -8,6 +8,16 @@
     <color name="wrong_color">#DC143C</color>
     <color name="input_bg_color">#E6E6FA</color>
     <color name="selected_color">#64C864</color>
+    <color name="row1_color">#4CAF50</color>
+    <color name="row2_color">#2196F3</color>
+    <color name="row3_color">#FF9800</color>
+    <color name="row4_color">#9C27B0</color>
+    <color name="row5_color">#009688</color>
+    <color name="row6_color">#F44336</color>
+    <color name="row7_color">#795548</color>
+    <color name="row8_color">#E91E63</color>
+    <color name="row9_color">#3F51B5</color>
+    <color name="row10_color">#388E3C</color>
     <color name="unselected_color">#C8C8C8</color>
     <color name="button_color">#4682B4</color>
     <color name="numpad_button_color">#F0F0FA</color>

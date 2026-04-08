@@ -22,6 +22,7 @@ public class ProblemView extends View {
     private Paint operatorPaint;
     private Paint inputBgPaint;
     private Paint borderPaint;
+    private Paint activeBorderPaint;
     private Paint checkPaint;
     private Paint xPaint;
 
@@ -30,6 +31,7 @@ public class ProblemView extends View {
     private boolean isActive = false;
     private float scale = 1.0f;
     private int bgColor = 0xFFFFFFFF;
+    private int activeBgColor = 0xFFF0F8FF;
 
     private int correctColor = 0xFF228B22;
     private int wrongColor = 0xFFDC143C;
@@ -101,6 +103,11 @@ public class ProblemView extends View {
         borderPaint.setColor(0xFF6464C8);
         borderPaint.setStyle(Paint.Style.STROKE);
         borderPaint.setStrokeWidth(4);
+
+        activeBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        activeBorderPaint.setColor(0xFF0066CC);
+        activeBorderPaint.setStyle(Paint.Style.STROKE);
+        activeBorderPaint.setStrokeWidth(8);
 
         checkPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         checkPaint.setColor(0xFF228B22);
@@ -357,10 +364,11 @@ public class ProblemView extends View {
         canvas.scale(scale, scale, cx, cy);
 
         RectF rect = new RectF(0, 0, width, height);
+        bgPaint.setColor(isActive ? activeBgColor : bgColor);
         canvas.drawRoundRect(rect, 16, 16, bgPaint);
 
         if (isActive) {
-            canvas.drawRoundRect(rect, 16, 16, borderPaint);
+            canvas.drawRoundRect(rect, 16, 16, activeBorderPaint);
         }
 
         if (problem == null) {
@@ -397,8 +405,8 @@ public class ProblemView extends View {
         canvas.drawRoundRect(inputRect, 8, 8, inputBgPaint);
 
         if (isActive) {
-            borderPaint.setStrokeWidth(3);
-            canvas.drawRoundRect(inputRect, 8, 8, borderPaint);
+            activeBorderPaint.setStrokeWidth(5);
+            canvas.drawRoundRect(inputRect, 8, 8, activeBorderPaint);
         }
 
         canvas.drawText(answer, xAns, centerY, textPaint);

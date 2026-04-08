@@ -179,6 +179,19 @@ public class MainActivity extends AppCompatActivity {
             updateStats();
             saveCurrentProgress();
             
+            boolean autoSwitch = trainer.getConfig().autoSwitchMode;
+            if (autoSwitch) {
+                if (problemView == problemView1) {
+                    activeProblem = problemView2;
+                    problemView1.setActive(false);
+                    problemView2.setActive(true);
+                } else {
+                    activeProblem = problemView1;
+                    problemView1.setActive(true);
+                    problemView2.setActive(false);
+                }
+            }
+            
             handler.postDelayed(() -> {
                 problemView.cancelTimer();
                 problemView.setProblem(isDivision ? 
@@ -224,5 +237,11 @@ public class MainActivity extends AppCompatActivity {
         EinmaleinsConfig config = configManager.loadConfig();
         trainer.setConfig(config);
         updateStats();
+        
+        if (config.autoSwitchMode) {
+            activeProblem = problemView1;
+            problemView1.setActive(true);
+            problemView2.setActive(false);
+        }
     }
 }

@@ -6,6 +6,7 @@ import java.util.Set;
 public class EinmaleinsConfig {
     public Set<Integer> baseNumbers;
     public HashSet<Integer>[] multipliers;
+    public boolean autoSwitchMode = true;
 
     @SuppressWarnings("unchecked")
     public EinmaleinsConfig() {
@@ -22,6 +23,7 @@ public class EinmaleinsConfig {
         for (int i = 1; i <= 10; i++) {
             copy.multipliers[i].addAll(this.multipliers[i]);
         }
+        copy.autoSwitchMode = this.autoSwitchMode;
         return copy;
     }
 }

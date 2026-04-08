@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ public class SetupActivity extends AppCompatActivity {
 
     private TableLayout tableLayout;
     private Button btnSave;
+    private Switch switchAutoSwitch;
 
     private boolean[][] multipliersSelected = new boolean[10][10];
 
@@ -36,11 +38,14 @@ public class SetupActivity extends AppCompatActivity {
         ImageButton btnBack = findViewById(R.id.btnBack);
         tableLayout = findViewById(R.id.tableLayout);
         btnSave = findViewById(R.id.btnSave);
+        switchAutoSwitch = findViewById(R.id.switchAutoSwitch);
 
         btnBack.setOnClickListener(v -> finish());
 
         loadConfigToArrays();
         buildTable();
+
+        switchAutoSwitch.setChecked(workingConfig.autoSwitchMode);
 
         btnSave.setOnClickListener(v -> saveConfig());
     }
@@ -125,7 +130,7 @@ public class SetupActivity extends AppCompatActivity {
         btn.setAllCaps(false);
         btn.setPadding(0, 0, 0, 0);
 
-        updateButtonStyle(btn, multipliersSelected[row][col]);
+        updateButtonStyle(btn, multipliersSelected[row][col], row);
 
         final int buttonSize = dpToPx(28);
         TableRow.LayoutParams params = new TableRow.LayoutParams(0, buttonSize);
@@ -135,15 +140,21 @@ public class SetupActivity extends AppCompatActivity {
 
         btn.setOnClickListener(v -> {
             multipliersSelected[row][col] = !multipliersSelected[row][col];
-            updateButtonStyle(btn, multipliersSelected[row][col]);
+            updateButtonStyle(btn, multipliersSelected[row][col], row);
         });
 
         return btn;
     }
 
-    private void updateButtonStyle(Button btn, boolean selected) {
+    private void updateButtonStyle(Button btn, boolean selected, int row) {
+        int[] rowColors = {
+            R.color.row1_color, R.color.row2_color, R.color.row3_color, R.color.row4_color,
+            R.color.row5_color, R.color.row6_color, R.color.row7_color, R.color.row8_color,
+            R.color.row9_color, R.color.row10_color
+        };
+
         int bgColor = selected ?
-            ContextCompat.getColor(this, R.color.selected_color) :
+            ContextCompat.getColor(this, rowColors[row]) :
             ContextCompat.getColor(this, R.color.unselected_color);
         int textColor = selected ? Color.WHITE : Color.DKGRAY;
 
@@ -176,6 +187,8 @@ public class SetupActivity extends AppCompatActivity {
             Toast.makeText(this, "Bitte mindestens einen Wert auswählen!", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        config.autoSwitchMode = switchAutoSwitch.isChecked();
 
         configManager.saveConfig(config);
         Toast.makeText(this, "Gespeichert!", Toast.LENGTH_SHORT).show();
