@@ -199,7 +199,7 @@ public class TimesTableStatsFragment extends Fragment {
                 tvLabel.setText(series + symbol);
                 setProgressBarWeight(progressBar, 0);
                 setProgressBarWeight(progressBarWrong, 0);
-                tvStats.setText("--");
+                tvStats.setText(R.string.stats_no_data);
                 tvStats.setTextColor(COLOR_DISABLED);
             } else {
                 Integer correct = correctMap != null ? correctMap.getOrDefault(series, 0) : 0;
@@ -232,7 +232,7 @@ public class TimesTableStatsFragment extends Fragment {
                     progressBarWrong.setMax(100);
                     progressBarWrong.setProgress(0);
                     
-                    tvStats.setText("0 von 0");
+                    tvStats.setText(String.format(getString(R.string.stats_format), 0, 0));
                     tvStats.setTextColor(COLOR_NONE);
                 }
             }

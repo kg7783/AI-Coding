@@ -7,6 +7,7 @@ public class EinmaleinsConfig {
     public Set<Integer> baseNumbers;
     public HashSet<Integer>[] multipliers;
     public boolean autoSwitchMode = true;
+    public String language = "en";
 
     @SuppressWarnings("unchecked")
     public EinmaleinsConfig() {
@@ -24,6 +25,7 @@ public class EinmaleinsConfig {
             copy.multipliers[i].addAll(this.multipliers[i]);
         }
         copy.autoSwitchMode = this.autoSwitchMode;
+        copy.language = this.language;
         return copy;
     }
 }

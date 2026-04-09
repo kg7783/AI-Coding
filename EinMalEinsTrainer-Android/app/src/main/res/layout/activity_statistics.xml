@@ -27,7 +27,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Alle"
+                    android:text="@string/filter_alle"
                     android:padding="8dp" />
 
                 <RadioButton
@@ -35,7 +35,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Heute"
+                    android:text="@string/filter_heute"
                     android:padding="8dp" />
 
                 <RadioButton
@@ -43,7 +43,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Woche"
+                    android:text="@string/filter_woche"
                     android:padding="8dp" />
 
                 <RadioButton
@@ -51,7 +51,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Monat"
+                    android:text="@string/filter_monat"
                     android:padding="8dp" />
 
             </RadioGroup>
@@ -66,7 +66,7 @@
                     android:id="@+id/radioCustom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Benutzerdefiniert"
+                    android:text="@string/filter_benutzerdefiniert"
                     android:padding="8dp" />
 
                 <Button
@@ -108,7 +108,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Übersicht"
+                    android:text="@string/label_uebersicht"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="#333333"
@@ -138,7 +138,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Sitzungen"
+                            android:text="@string/label_sitzungen"
                             android:textSize="12sp"
                             android:textColor="#666666" />
 
@@ -163,7 +163,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Aufgaben"
+                            android:text="@string/label_aufgaben"
                             android:textSize="12sp"
                             android:textColor="#666666" />
 
@@ -188,7 +188,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ø Erfolgsquote"
+                            android:text="@string/label_erfolgsquote"
                             android:textSize="12sp"
                             android:textColor="#666666" />
 
@@ -235,7 +235,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Richtig"
+                        android:text="@string/label_richtig"
                         android:textSize="14sp"
                         android:textColor="#228B22" />
 
@@ -272,7 +272,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Falsch"
+                        android:text="@string/label_falsch"
                         android:textSize="14sp"
                         android:textColor="#DC143C" />
 

@@ -1,13 +1,17 @@
 package de.einmaleins.trainer;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -17,6 +21,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import java.util.Locale;
+
 public class SetupActivity extends AppCompatActivity {
     private ConfigManager configManager;
     private EinmaleinsConfig workingConfig;
@@ -24,6 +30,7 @@ public class SetupActivity extends AppCompatActivity {
     private TableLayout tableLayout;
     private Button btnSave;
     private Switch switchAutoSwitch;
+    private Spinner spinnerLanguage;
 
     private boolean[][] multipliersSelected = new boolean[10][10];
 
@@ -33,14 +40,19 @@ public class SetupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setup);
 
         configManager = new ConfigManager(this);
+        applyLanguage(configManager.getLanguage());
+        
         workingConfig = configManager.loadConfig();
 
         ImageButton btnBack = findViewById(R.id.btnBack);
         tableLayout = findViewById(R.id.tableLayout);
         btnSave = findViewById(R.id.btnSave);
         switchAutoSwitch = findViewById(R.id.switchAutoSwitch);
+        spinnerLanguage = findViewById(R.id.spinnerLanguage);
 
         btnBack.setOnClickListener(v -> finish());
+
+        setupLanguageSpinner();
 
         loadConfigToArrays();
         buildTable();
@@ -48,6 +60,44 @@ public class SetupActivity extends AppCompatActivity {
         switchAutoSwitch.setChecked(workingConfig.autoSwitchMode);
 
         btnSave.setOnClickListener(v -> saveConfig());
+    }
+
+    private void applyLanguage(String language) {
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration(getResources().getConfiguration());
+        config.setLocale(locale);
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+    }
+
+    private void setupLanguageSpinner() {
+        String[] languages = {"English", "Deutsch"};
+        String[] languageCodes = {"en", "de"};
+        
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, languages);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerLanguage.setAdapter(adapter);
+        
+        String currentLang = workingConfig.language;
+        for (int i = 0; i < languageCodes.length; i++) {
+            if (languageCodes[i].equals(currentLang)) {
+                spinnerLanguage.setSelection(i);
+                break;
+            }
+        }
+        
+        spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedLang = languageCodes[position];
+                if (!selectedLang.equals(workingConfig.language)) {
+                    workingConfig.language = selectedLang;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
     }
 
     private void loadConfigToArrays() {
@@ -99,7 +149,7 @@ public class SetupActivity extends AppCompatActivity {
             dataRow.setGravity(Gravity.CENTER);
 
             TextView labelCell = new TextView(this);
-            labelCell.setText(num + ":");
+            labelCell.setText(String.format(getString(R.string.row_label_format), num));
             labelCell.setTextSize(12);
             labelCell.setTextColor(Color.BLACK);
             labelCell.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
@@ -184,14 +234,23 @@ public class SetupActivity extends AppCompatActivity {
         }
 
         if (config.baseNumbers.isEmpty()) {
-            Toast.makeText(this, "Bitte mindestens einen Wert auswählen!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_bitte_auswaehlen, Toast.LENGTH_SHORT).show();
             return;
         }
 
         config.autoSwitchMode = switchAutoSwitch.isChecked();
+        config.language = workingConfig.language;
 
+        String oldLanguage = configManager.getLanguage();
+        
         configManager.saveConfig(config);
-        Toast.makeText(this, "Gespeichert!", Toast.LENGTH_SHORT).show();
+        configManager.saveLanguage(workingConfig.language);
+        
+        if (!workingConfig.language.equals(oldLanguage)) {
+            MainActivity.languageChanged = true;
+        }
+        
+        Toast.makeText(this, R.string.toast_gespeichert, Toast.LENGTH_SHORT).show();
         finish();
     }
 

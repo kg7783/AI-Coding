@@ -92,14 +92,14 @@ public class SessionListFragment extends Fragment implements SessionAdapter.OnSe
 
     private void showClearAllDialog() {
         new AlertDialog.Builder(requireContext())
-                .setTitle("Alle löschen")
-                .setMessage("Möchtest du wirklich alle Sitzungen löschen?")
-                .setPositiveButton("Löschen", (dialog, which) -> {
+                .setTitle(R.string.dialog_alle_loeschen_title)
+                .setMessage(R.string.dialog_alle_loeschen_message)
+                .setPositiveButton(R.string.btn_loeschen, (dialog, which) -> {
                     sessionManager.clearAllSessions();
                     adapter.updateSessions(sessionManager.loadSessions());
                     updateEmptyState();
                 })
-                .setNegativeButton("Abbrechen", null)
+                .setNegativeButton(R.string.btn_abbrechen, null)
                 .show();
     }
 }

@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ein Mal Eins"
+            android:text="@string/title_ein_mal_eins"
             android:textSize="32sp"
             android:textColor="#000000"
             android:textStyle="bold" />
@@ -30,7 +30,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Trainer"
+            android:text="@string/title_trainer"
             android:textSize="32sp"
             android:textColor="#333333"
             android:textStyle="bold" />
@@ -69,7 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginBottom="8dp"
-        android:text="Verlauf"
+        android:text="@string/btn_verlauf"
         android:textSize="16sp"
         android:background="#228B22"
         android:textColor="#FFFFFF" />
@@ -79,7 +79,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginBottom="8dp"
-        android:text="Neue Sitzung"
+        android:text="@string/btn_neue_sitzung"
         android:textSize="16sp"
         android:background="#FFA500"
         android:textColor="#FFFFFF" />
@@ -88,7 +88,7 @@
         android:id="@+id/btnSetup"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:text="Konfiguration"
+        android:text="@string/btn_konfiguration"
         android:textSize="16sp"
         android:background="#4682B4"
         android:textColor="#FFFFFF" />

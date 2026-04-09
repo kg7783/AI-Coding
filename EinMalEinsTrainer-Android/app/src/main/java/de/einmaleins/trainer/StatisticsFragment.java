@@ -220,11 +220,11 @@ public class StatisticsFragment extends Fragment {
         List<Integer> colors = new ArrayList<>();
         
         if (stats.correctAnswers > 0) {
-            entries.add(new PieEntry(stats.correctAnswers, "Richtig"));
+            entries.add(new PieEntry(stats.correctAnswers, getString(R.string.label_richtig)));
             colors.add(COLOR_CORRECT);
         }
         if (stats.wrongAnswers > 0) {
-            entries.add(new PieEntry(stats.wrongAnswers, "Falsch"));
+            entries.add(new PieEntry(stats.wrongAnswers, getString(R.string.label_falsch)));
             colors.add(COLOR_WRONG);
         }
 
@@ -266,14 +266,14 @@ public class StatisticsFragment extends Fragment {
             ProgressSession session = filteredSessions.get(i);
             correctEntries.add(new BarEntry(i, session.getCorrectAnswers()));
             wrongEntries.add(new BarEntry(i, session.getWrongAnswers()));
-            labels.add("S" + (i + 1));
+            labels.add(String.format(getString(R.string.series_label_format), i + 1));
         }
 
-        BarDataSet correctDataSet = new BarDataSet(correctEntries, "Richtig");
+        BarDataSet correctDataSet = new BarDataSet(correctEntries, getString(R.string.label_richtig));
         correctDataSet.setColor(COLOR_CORRECT);
         correctDataSet.setValueTextSize(10f);
 
-        BarDataSet wrongDataSet = new BarDataSet(wrongEntries, "Falsch");
+        BarDataSet wrongDataSet = new BarDataSet(wrongEntries, getString(R.string.label_falsch));
         wrongDataSet.setColor(COLOR_WRONG);
         wrongDataSet.setValueTextSize(10f);
 

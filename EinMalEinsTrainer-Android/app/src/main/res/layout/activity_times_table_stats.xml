@@ -27,7 +27,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Alle"
+                    android:text="@string/filter_alle"
                     android:padding="8dp" />
 
                 <RadioButton
@@ -35,7 +35,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Heute"
+                    android:text="@string/filter_heute"
                     android:padding="8dp" />
 
                 <RadioButton
@@ -43,7 +43,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Woche"
+                    android:text="@string/filter_woche"
                     android:padding="8dp" />
 
                 <RadioButton
@@ -51,7 +51,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Monat"
+                    android:text="@string/filter_monat"
                     android:padding="8dp" />
 
             </RadioGroup>
@@ -66,7 +66,7 @@
                     android:id="@+id/radioCustom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Benutzerdefiniert"
+                    android:text="@string/filter_benutzerdefiniert"
                     android:padding="8dp" />
 
                 <LinearLayout
@@ -101,7 +101,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Multiplikation"
+            android:text="@string/label_multiplikation"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#333333"
@@ -141,7 +141,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Division"
+            android:text="@string/label_division"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#333333"

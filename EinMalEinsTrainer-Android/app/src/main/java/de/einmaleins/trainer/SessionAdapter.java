@@ -77,7 +77,7 @@ public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.ViewHold
             String startTime = DATE_FORMAT.format(new Date(session.getStartTimestamp()));
             String endTime = session.getEndTimestamp() > 0 
                     ? DATE_FORMAT.format(new Date(session.getEndTimestamp()))
-                    : "...";
+                    : itemView.getContext().getString(R.string.end_time_placeholder);
             tvDate.setText(startTime + " - " + endTime);
             
             tvCorrect.setText(String.format(Locale.GERMAN, "%d", session.getCorrectAnswers()));

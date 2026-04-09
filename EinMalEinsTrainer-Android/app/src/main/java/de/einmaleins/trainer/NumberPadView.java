@@ -25,7 +25,7 @@ public class NumberPadView extends View {
     private static final int VALUE_OK = -2;
 
     private static final int[] BUTTON_VALUES = {1, 2, 3, 4, 5, 6, 7, 8, 9, VALUE_DELETE, 0, VALUE_OK};
-    private static final String[] BUTTON_LABELS = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "DEL", "0", "OK"};
+    private static final int[] BUTTON_LABELS = {1, 2, 3, 4, 5, 6, 7, 8, 9, R.string.btn_del, 0, R.string.btn_ok};
 
     private Paint buttonPaint;
     private Paint textPaint;
@@ -120,7 +120,14 @@ public class NumberPadView extends View {
             canvas.drawRoundRect(rect, CORNER_RADIUS, CORNER_RADIUS, borderPaint);
 
             float textY = rect.centerY() + textSize / 3f;
-            canvas.drawText(BUTTON_LABELS[i], rect.centerX(), textY, textPaint);
+            int labelRes = BUTTON_LABELS[i];
+            String label;
+            if (labelRes >= 10) {
+                label = getContext().getString(labelRes);
+            } else {
+                label = String.valueOf(labelRes);
+            }
+            canvas.drawText(label, rect.centerX(), textY, textPaint);
         }
     }
 

@@ -109,7 +109,7 @@ public class StatsView extends View {
         
         symbolPaint.setColor(correctColor);
         symbolPaint.setTextSize(height * 0.35f);
-        canvas.drawText("✓", padding + 140, height / 2 + 5, symbolPaint);
+        canvas.drawText(getContext().getString(R.string.symbol_correct), padding + 140, height / 2 + 5, symbolPaint);
 
         // Wrong number with symbol
         textPaint.setColor(wrongColor);
@@ -121,7 +121,7 @@ public class StatsView extends View {
         
         symbolPaint.setColor(wrongColor);
         symbolPaint.setTextSize(height * 0.35f);
-        canvas.drawText("✗", width - padding - 150, height / 2 + 5, symbolPaint);
+        canvas.drawText(getContext().getString(R.string.symbol_wrong), width - padding - 150, height / 2 + 5, symbolPaint);
 
         // Percentage in center
         if (total > 0) {

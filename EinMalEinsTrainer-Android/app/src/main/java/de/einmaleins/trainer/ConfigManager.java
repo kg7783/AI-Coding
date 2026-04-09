@@ -10,6 +10,7 @@ public class ConfigManager {
     private static final String KEY_BASE_NUMBERS = "baseNumbers";
     private static final String KEY_MULTIPLIERS = "multipliers";
     private static final String KEY_AUTO_SWITCH_MODE = "autoSwitchMode";
+    private static final String KEY_LANGUAGE = "language";
     private static final String KEY_CUSTOM_START_DATE_STATS = "custom_start_date_stats";
     private static final String KEY_CUSTOM_END_DATE_STATS = "custom_end_date_stats";
     private static final String KEY_CUSTOM_START_DATE_SERIES = "custom_start_date_series";
@@ -47,6 +48,7 @@ public class ConfigManager {
         }
 
         editor.putBoolean(KEY_AUTO_SWITCH_MODE, config.autoSwitchMode);
+        editor.putString(KEY_LANGUAGE, config.language);
         editor.apply();
     }
 
@@ -82,6 +84,7 @@ public class ConfigManager {
         }
 
         config.autoSwitchMode = prefs.getBoolean(KEY_AUTO_SWITCH_MODE, true);
+        config.language = prefs.getString(KEY_LANGUAGE, "en");
 
         if (config.baseNumbers.isEmpty()) {
             for (int i = 1; i <= 10; i++) {
@@ -147,6 +150,14 @@ public class ConfigManager {
 
     public String getLastFilterSeries() {
         return prefs.getString(KEY_LAST_FILTER_SERIES, "ALL");
+    }
+
+    public void saveLanguage(String language) {
+        prefs.edit().putString(KEY_LANGUAGE, language).apply();
+    }
+
+    public String getLanguage() {
+        return prefs.getString(KEY_LANGUAGE, "en");
     }
 
     private long getStartOfDay(int daysAgo) {

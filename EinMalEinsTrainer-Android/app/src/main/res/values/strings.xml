@@ -4,4 +4,75 @@
     <string name="btn_start_date">Anfang</string>
     <string name="btn_end_date">Ende</string>
     <string name="select_date">Datum wählen</string>
+
+    <!-- Main Activity -->
+    <string name="title_ein_mal_eins">Ein Mal Eins</string>
+    <string name="title_trainer">Trainer</string>
+    <string name="btn_verlauf">Verlauf</string>
+    <string name="btn_neue_sitzung">Neue Sitzung</string>
+    <string name="btn_konfiguration">Konfiguration</string>
+
+    <!-- Setup Activity -->
+    <string name="title_setup">Setup</string>
+    <string name="label_automatischer_wechsel">Automatischer Wechsel</string>
+    <string name="btn_speichern">Speichern</string>
+    <string name="content_description_zurueck">Zurück</string>
+    <string name="row_label_format">%d:</string>
+    <string name="toast_bitte_auswaehlen">Bitte mindestens einen Wert auswählen!</string>
+    <string name="toast_gespeichert">Gespeichert!</string>
+    <string name="label_sprache">Sprache</string>
+
+    <!-- Session List Activity -->
+    <string name="title_verlauf">Verlauf</string>
+    <string name="content_description_alle_loeschen">Alle löschen</string>
+    <string name="tab_sitzungen">Sitzungen</string>
+    <string name="tab_auswertung">Auswertung</string>
+    <string name="tab_reihen">Reihen</string>
+    <string name="dialog_alle_loeschen_title">Alle löschen</string>
+    <string name="dialog_alle_loeschen_message">Möchtest du wirklich alle Sitzungen löschen?</string>
+    <string name="btn_loeschen">Löschen</string>
+    <string name="btn_abbrechen">Abbrechen</string>
+    <string name="toast_testdaten">5 Sekunden halten für Testdaten...</string>
+    <string name="dialog_testdaten_title">Testdaten generieren</string>
+    <string name="dialog_testdaten_message">Möchtest du 6 Test-Sessions erstellen?</string>
+    <string name="btn_ja">Ja</string>
+    <string name="btn_nein">Nein</string>
+
+    <!-- Statistics Fragment -->
+    <string name="label_richtig">Richtig</string>
+    <string name="label_falsch">Falsch</string>
+    <string name="series_label_format">S%d</string>
+    <string name="label_uebersicht">Übersicht</string>
+    <string name="label_sitzungen">Sitzungen</string>
+    <string name="label_aufgaben">Aufgaben</string>
+    <string name="label_erfolgsquote">Ø Erfolgsquote</string>
+    <string name="filter_alle">Alle</string>
+    <string name="filter_heute">Heute</string>
+    <string name="filter_woche">Woche</string>
+    <string name="filter_monat">Monat</string>
+    <string name="filter_benutzerdefiniert">Benutzerdefiniert</string>
+
+    <!-- SessionAdapter -->
+    <string name="end_time_placeholder">...</string>
+
+    <!-- StatsView -->
+    <string name="symbol_correct">✓</string>
+    <string name="symbol_wrong">✗</string>
+
+    <!-- NumberPadView -->
+    <string name="btn_del">DEL</string>
+    <string name="btn_ok">OK</string>
+
+    <!-- ProblemView -->
+    <string name="operator_equals">=</string>
+    <string name="placeholder_underscore">_</string>
+
+    <!-- Fragment Session List -->
+    <string name="empty_state_message">Noch keine Sitzungen gespeichert</string>
+
+    <!-- Times Table Stats -->
+    <string name="label_multiplikation">Multiplikation</string>
+    <string name="label_division">Division</string>
+    <string name="stats_no_data">--</string>
+    <string name="stats_format">%1$d von %2$d</string>
 </resources>

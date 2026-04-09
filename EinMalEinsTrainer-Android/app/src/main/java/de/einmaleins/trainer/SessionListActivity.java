@@ -1,5 +1,6 @@
 package de.einmaleins.trainer;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,6 +14,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.Locale;
+
 public class SessionListActivity extends AppCompatActivity {
     private ViewPager2 viewPager;
     private TabLayout tabLayout;
@@ -25,6 +28,8 @@ public class SessionListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ConfigManager cm = new ConfigManager(this);
+        applyLanguage(cm.getLanguage());
         setContentView(R.layout.activity_session_list);
 
         handler = new Handler(Looper.getMainLooper());
@@ -59,13 +64,13 @@ public class SessionListActivity extends AppCompatActivity {
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             switch (position) {
                 case 0:
-                    tab.setText("Sitzungen");
+                    tab.setText(R.string.tab_sitzungen);
                     break;
                 case 1:
-                    tab.setText("Auswertung");
+                    tab.setText(R.string.tab_auswertung);
                     break;
                 case 2:
-                    tab.setText("Reihen");
+                    tab.setText(R.string.tab_reihen);
                     break;
             }
         }).attach();
@@ -80,15 +85,15 @@ public class SessionListActivity extends AppCompatActivity {
             if (fragment != null) {
                 fragment.getView().post(() -> {
                     android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(this)
-                            .setTitle("Alle löschen")
-                            .setMessage("Möchtest du wirklich alle Sitzungen löschen?")
-                            .setPositiveButton("Löschen", (d, which) -> {
+                            .setTitle(R.string.dialog_alle_loeschen_title)
+                            .setMessage(R.string.dialog_alle_loeschen_message)
+                            .setPositiveButton(R.string.btn_loeschen, (d, which) -> {
                                 de.einmaleins.trainer.SessionManager manager = 
                                         new de.einmaleins.trainer.SessionManager(this);
                                 manager.clearAllSessions();
                                 fragment.updateSessions();
                             })
-                            .setNegativeButton("Abbrechen", null)
+                            .setNegativeButton(R.string.btn_abbrechen, null)
                             .create();
                     dialog.show();
                 });
@@ -102,7 +107,7 @@ public class SessionListActivity extends AppCompatActivity {
 
         btnClearAll.setOnLongClickListener(v -> {
             isLongClickTriggered = false;
-            Toast.makeText(this, "5 Sekunden halten für Testdaten...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_testdaten, Toast.LENGTH_SHORT).show();
             handler.postDelayed(longClickRunnable, 5000);
             return true;
         });
@@ -118,9 +123,9 @@ public class SessionListActivity extends AppCompatActivity {
 
     private void showTestDataDialog() {
         new android.app.AlertDialog.Builder(this)
-                .setTitle("Testdaten generieren")
-                .setMessage("Möchtest du 6 Test-Sessions erstellen?")
-                .setPositiveButton("Ja", (d, which) -> {
+                .setTitle(R.string.dialog_testdaten_title)
+                .setMessage(R.string.dialog_testdaten_message)
+                .setPositiveButton(R.string.btn_ja, (d, which) -> {
                     TestDataGenerator.generateTestSessions(this);
                     SessionListFragment fragment = (SessionListFragment) getSupportFragmentManager()
                             .findFragmentByTag("f0");
@@ -128,7 +133,15 @@ public class SessionListActivity extends AppCompatActivity {
                         fragment.updateSessions();
                     }
                 })
-                .setNegativeButton("Nein", null)
+                .setNegativeButton(R.string.btn_nein, null)
                 .show();
+    }
+    
+    private void applyLanguage(String language) {
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration(getResources().getConfiguration());
+        config.setLocale(locale);
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 }

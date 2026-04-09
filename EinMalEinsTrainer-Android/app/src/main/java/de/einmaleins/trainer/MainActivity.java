@@ -1,6 +1,7 @@
 package de.einmaleins.trainer;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,8 +10,11 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
     private static final long ANIMATION_DELAY_MS = 600;
+    public static boolean languageChanged = false;
 
     private Trainer trainer;
     private ConfigManager configManager;
@@ -29,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        configManager = new ConfigManager(this);
+        applyLanguage(configManager.getLanguage());
         setContentView(R.layout.activity_main);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -36,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         handler = new Handler(Looper.getMainLooper());
         sessionManager = new SessionManager(this);
 
-        configManager = new ConfigManager(this);
         trainer = new Trainer();
 
         EinmaleinsConfig config = configManager.loadConfig();
@@ -234,6 +239,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        
+        String currentLang = new ConfigManager(this).getLanguage();
+        if (languageChanged) {
+            languageChanged = false;
+            applyLanguage(currentLang);
+            recreate();
+            return;
+        }
+        
+        applyLanguage(currentLang);
         EinmaleinsConfig config = configManager.loadConfig();
         trainer.setConfig(config);
         updateStats();
@@ -243,5 +258,13 @@ public class MainActivity extends AppCompatActivity {
             problemView1.setActive(true);
             problemView2.setActive(false);
         }
+    }
+    
+    private void applyLanguage(String language) {
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration(getResources().getConfiguration());
+        config.setLocale(locale);
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 }

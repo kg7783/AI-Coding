@@ -385,8 +385,8 @@ public class ProblemView extends View {
         String num1 = String.valueOf(problem.num1);
         String op = String.valueOf(problem.operation);
         String num2 = String.valueOf(problem.num2);
-        String eq = "=";
-        String answer = answerText.isEmpty() ? "_" : answerText;
+        String eq = getContext().getString(R.string.operator_equals);
+        String answer = answerText.isEmpty() ? getContext().getString(R.string.placeholder_underscore) : answerText;
 
         float x1 = width * 0.12f;
         float xOp = width * 0.30f;

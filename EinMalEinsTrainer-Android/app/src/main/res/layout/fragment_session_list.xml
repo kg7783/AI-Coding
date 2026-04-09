@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Noch keine Sitzungen gespeichert"
+            android:text="@string/empty_state_message"
             android:textSize="18sp"
             android:textColor="#666666" />
 

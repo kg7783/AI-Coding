@@ -19,13 +19,13 @@
             android:layout_height="48dp"
             android:src="@android:drawable/ic_menu_revert"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Zurück" />
+            android:contentDescription="@string/content_description_zurueck" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Verlauf"
+            android:text="@string/title_verlauf"
             android:textSize="22sp"
             android:textColor="#000000"
             android:textAlignment="center" />
@@ -36,7 +36,7 @@
             android:layout_height="48dp"
             android:src="@android:drawable/ic_menu_delete"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Alle löschen" />
+            android:contentDescription="@string/content_description_alle_loeschen" />
 
     </LinearLayout>
 

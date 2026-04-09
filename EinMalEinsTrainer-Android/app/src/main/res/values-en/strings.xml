@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Times Table Trainer</string>
+    <string name="btn_start_date">Start</string>
+    <string name="btn_end_date">End</string>
+    <string name="select_date">Select date</string>
+
+    <!-- Main Activity -->
+    <string name="title_ein_mal_eins">Times Table</string>
+    <string name="title_trainer">Trainer</string>
+    <string name="btn_verlauf">History</string>
+    <string name="btn_neue_sitzung">New Session</string>
+    <string name="btn_konfiguration">Settings</string>
+
+    <!-- Setup Activity -->
+    <string name="title_setup">Setup</string>
+    <string name="label_automatischer_wechsel">Auto-switch</string>
+    <string name="btn_speichern">Save</string>
+    <string name="content_description_zurueck">Back</string>
+    <string name="row_label_format">%d:</string>
+    <string name="toast_bitte_auswaehlen">Please select at least one value!</string>
+    <string name="toast_gespeichert">Saved!</string>
+    <string name="label_sprache">Language</string>
+
+    <!-- Session List Activity -->
+    <string name="title_verlauf">History</string>
+    <string name="content_description_alle_loeschen">Delete all</string>
+    <string name="tab_sitzungen">Sessions</string>
+    <string name="tab_auswertung">Statistics</string>
+    <string name="tab_reihen">Tables</string>
+    <string name="dialog_alle_loeschen_title">Delete all</string>
+    <string name="dialog_alle_loeschen_message">Do you really want to delete all sessions?</string>
+    <string name="btn_loeschen">Delete</string>
+    <string name="btn_abbrechen">Cancel</string>
+    <string name="toast_testdaten">Hold for 5 seconds for test data...</string>
+    <string name="dialog_testdaten_title">Generate test data</string>
+    <string name="dialog_testdaten_message">Create 6 test sessions?</string>
+    <string name="btn_ja">Yes</string>
+    <string name="btn_nein">No</string>
+
+    <!-- Statistics Fragment -->
+    <string name="label_richtig">Correct</string>
+    <string name="label_falsch">Wrong</string>
+    <string name="series_label_format">S%d</string>
+    <string name="label_uebersicht">Overview</string>
+    <string name="label_sitzungen">Sessions</string>
+    <string name="label_aufgaben">Problems</string>
+    <string name="label_erfolgsquote">Ø Accuracy</string>
+    <string name="filter_alle">All</string>
+    <string name="filter_heute">Today</string>
+    <string name="filter_woche">Week</string>
+    <string name="filter_monat">Month</string>
+    <string name="filter_benutzerdefiniert">Custom</string>
+
+    <!-- SessionAdapter -->
+    <string name="end_time_placeholder">...</string>
+
+    <!-- StatsView -->
+    <string name="symbol_correct">✓</string>
+    <string name="symbol_wrong">✗</string>
+
+    <!-- NumberPadView -->
+    <string name="btn_del">DEL</string>
+    <string name="btn_ok">OK</string>
+
+    <!-- ProblemView -->
+    <string name="operator_equals">=</string>
+    <string name="placeholder_underscore">_</string>
+
+    <!-- Fragment Session List -->
+    <string name="empty_state_message">No sessions saved yet</string>
+
+    <!-- Times Table Stats -->
+    <string name="label_multiplikation">Multiplication</string>
+    <string name="label_division">Division</string>
+    <string name="stats_no_data">--</string>
+    <string name="stats_format">%1$d of %2$d</string>
+</resources>
